@@ -54,6 +54,7 @@ class InvoiceData(BaseModel):
     invoice_number: str = Field(default="", description="Invoice number")
     invoice_date: str = Field(default="", description="Invoice date in YYYY-MM-DD format")
     due_date: Optional[str] = Field(default=None, description="Due date in YYYY-MM-DD format")
+    gst_number: Optional[str] = Field(default=None, description="GST number for the invoice")
     
     # Vendor Information
     vendor_name: str = Field(default="", description="Vendor/supplier name")
@@ -126,6 +127,7 @@ You are an expert invoice data extraction specialist. Extract ALL information fr
     "customer_address": "string or null",
     "customer_phone": "string or null",
     "customer_email": "string or null",
+    "gst_number": "string or null",
     "line_items": [
         {{
             "description": "string",
@@ -164,7 +166,7 @@ Return ONLY valid JSON that matches the structure above. Include all line items 
 # 4.  LLM WRAPPERS
 # ------------------------------------------------------------------ #
 DEFAULT_MODEL = "pixtral-12b-latest"
-OPENROUTER_MODEL = "qwen/qwen2.5-vl-72b-instruct"
+OPENROUTER_MODEL = "google/gemini-flash-1.5"
 
 def _mistral_parse(chunks) -> Dict[str, Any]:
     try:
@@ -280,6 +282,7 @@ def convert_invoices_to_csv(invoices: List[Dict[str, Any]]) -> pd.DataFrame:
             'currency': invoice.get('currency', 'USD'),
             'payment_terms': invoice.get('payment_terms', ''),
             'notes': invoice.get('notes', ''),
+            'gst_number': invoice.get('gst_number', ''),
         }
         
         # Process line items
@@ -335,6 +338,7 @@ def create_summary_csv(invoices: List[Dict[str, Any]]) -> pd.DataFrame:
             'discount_amount': invoice.get('discount_amount', 0),
             'total_amount': invoice.get('total_amount', 0),
             'currency': invoice.get('currency', 'USD'),
+            'gst_number': invoice.get('gst_number', ''),
         }
         summary_rows.append(summary_row)
     
@@ -599,3 +603,8 @@ else:
     }
     
     st.json(example_data)
+
+
+
+
+# gst invoice 
