@@ -166,7 +166,8 @@ Return ONLY valid JSON that matches the structure above. Include all line items 
 # 4.  LLM WRAPPERS
 # ------------------------------------------------------------------ #
 DEFAULT_MODEL = "pixtral-12b-latest"
-OPENROUTER_MODEL = "google/gemini-flash-1.5"
+# OPENROUTER_MODEL = "google/gemini-flash-1.5"
+OPENROUTER_MODEL = "google/gemini-2.0-flash-exp:free"
 
 def _mistral_parse(chunks) -> Dict[str, Any]:
     try:
